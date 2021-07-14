@@ -2,8 +2,9 @@
 
 import requests as req
 import json
+import time
+import collections
 
-#real_path = os.path.dirname(__file__)
 # res = req.get("https://datos.comunidad.madrid/catalogo/dataset/7da43feb-8d4d-47e0-abd5-3d022d29d09e/resource/ead67556-7e7d-45ee-9ae5-68765e1ebf7a/download/covid19_tia_muni_y_distritos.json").json()
 
 # with open("covid.json", "w", encoding="utf8") as file:
@@ -52,3 +53,56 @@ print(f"Casos en el dia {date}: ", get_cases(data, date))
 print("--------------")
 
 #Obtener los 10 municipios con mayor cantidad de confirmados totales
+rank = 10
+print(f"TOP {rank} casos confirmados totales")
+def get_worst(dataset):
+    filtered_list = []
+    for mun in dataset:
+        try:
+            mun['casos_confirmados_totales']
+            filtered_list.append(mun)
+        except KeyError:
+            pass
+    result = sorted(filtered_list, key= lambda mun: mun['casos_confirmados_totales'], reverse=True)[0:rank]
+    [print(f"{mun['municipio_distrito']}: {mun['casos_confirmados_totales']}") for mun in result]
+
+get_worst(data[0:199])
+print("--------------")
+
+#Crear una lista con la sumatoria de los casos confirmados totales por día
+start = time.perf_counter()
+fechas_uniques = []
+for mun in data:
+    if mun['fecha_informe'].split(" ")[0] not in fechas_uniques:
+        fechas_uniques.append(mun['fecha_informe'].split(" ")[0])
+print("Cantidad total de fechas: ", len(fechas_uniques))
+
+def cases_date(data, fechas_uniques):
+    dict_dates = {}
+    #list_cases = []
+    for date in fechas_uniques:
+        dict_dates[date] = get_cases(data, date)
+        #list_cases.append(get_cases(data, date))
+        #print(f"Casos en el dia {fecha}: ", get_cases(data, fecha))
+    return dict_dates
+
+dict_dates = cases_date(data, fechas_uniques)
+#print(dict_dates)
+finish = time.perf_counter()
+print("tiempo ejecucion: ", finish - start)
+print("--------------")
+result = collections.OrderedDict(sorted(dict_dates.items()))
+print(result)
+
+# Crear un objeto estadística que reciba un valor X y otro valor Y, deben ser listas
+class Estadistica:
+    def __init__(self,name, x, y):
+        self.name = name
+        self.x = x
+        self.y = y
+
+    @property
+    def n(self):
+        self.n = len(n)
+
+ejemplo = Estadistica("Ejemplo", [1,2,3],[4,5,6])
