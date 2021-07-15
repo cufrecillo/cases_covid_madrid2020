@@ -91,8 +91,22 @@ dict_dates = cases_date(data, fechas_uniques)
 finish = time.perf_counter()
 print("tiempo ejecucion: ", finish - start)
 print("--------------")
+
+
+#   CREACION LISTAS X e Y PARA EL GRAFICO POSTERIOR.
+#Y =create_y(data)
+#Y = dict(sorted(Y.items(), key= lambda tupla: tupla[0]))
 result = collections.OrderedDict(sorted(dict_dates.items()))
-print(result)
+#print(result)
+y = dict(result)
+#print(Y)
+Y = list(y.values())
+X = list(y.keys())
+print(Y)
+print(X)
+print("--------------")
+
+
 
 # Crear un objeto estadística que reciba un valor X y otro valor Y, deben ser listas
 class Estadistica:
