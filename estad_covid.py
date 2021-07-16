@@ -36,11 +36,23 @@ class Statistics:
     def cov(self):
         return (self.xy / self.n) - (self.x_mean * self.y_mean)
 
+    @property
+    def rxy(self):
+        return self.cov / ((self.x_var ** 0.5) *(self.y_var **0.5))
 
+    @property
+    def B(self):
+        return self.rxy * ((self.y_var ** 0.5) / (self.x_var ** 0.5))
 
+    @property
+    def B0(self):
+        return self.y_mean - (self.B * self.x_mean)
+
+    def prediction(self, value):
+        return (self.B * value) + self.B0
 
 test = Statistics([7,11], [9,8])
 test2 = Statistics([20,19], [9,8])
 
-
-print(test.cov)
+# print(test.rxy)
+# print(test.prediction(4))

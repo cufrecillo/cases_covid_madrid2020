@@ -4,6 +4,8 @@ import requests as req
 import json
 import time
 import collections
+import matplotlib.pyplot as plt
+from estad_covid import Statistics
 
 # res = req.get("https://datos.comunidad.madrid/catalogo/dataset/7da43feb-8d4d-47e0-abd5-3d022d29d09e/resource/ead67556-7e7d-45ee-9ae5-68765e1ebf7a/download/covid19_tia_muni_y_distritos.json").json()
 
@@ -101,22 +103,36 @@ result = collections.OrderedDict(sorted(dict_dates.items()))
 y = dict(result)
 #print(Y)
 Y = list(y.values())
-X = list(y.keys())
+#X = list(y.keys())
+X = [num for num in range(1, len(Y)+1)]
 print(Y)
 print(X)
 print("--------------")
 
-
-
 # Crear un objeto estadística que reciba un valor X y otro valor Y, deben ser listas
-class Estadistica:
-    def __init__(self,name, x, y):
-        self.name = name
-        self.x = x
-        self.y = y
+# REALIZADO EN EL ARCHIVO estad_covid.py
 
-    @property
-    def n(self):
-        self.n = len(n)
+covid_data = Statistics(X, Y)
 
-ejemplo = Estadistica("Ejemplo", [1,2,3],[4,5,6])
+# plt.plot(X, Y)
+# plt.xlabel('26/02/2020 - 01/07/2021')
+# plt.ylabel('CASOS COVID MADRID')
+# plt.show()
+
+Y_until65 = Y[:66]
+X_until65 = [num for num in range(1, len(Y_until65)+1)]
+# plt.plot(X_until65, Y_until65)
+# plt.xlabel('Primeros 65 dias')
+# plt.ylabel('CASOS COVID MADRID')
+# plt.show()
+
+Y_after65 = Y[66:]
+X_after65 = [num for num in range(1, len(Y_after65)+1)]
+# plt.plot(X_after65, Y_after65)
+# plt.xlabel('Despues de los 65 primeros dias')
+# plt.ylabel('CASOS COVID MADRID')
+# plt.show()
+
+after65 = Statistics(X_after65, Y_after65)
+print(after65.rxy)
+print(after65.prediction(77))
