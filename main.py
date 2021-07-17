@@ -11,7 +11,6 @@ from estad_covid import Statistics
 
 # with open("covid.json", "w", encoding="utf8") as file:
 #     json.dump(res, file, indent =4, ensure_ascii=True)
-#print(data)
 
 def read_json():
     with open("./covid.json", encoding="utf8") as file:
@@ -22,6 +21,7 @@ data = read_json()
 print(len(data))
 print(data[0])
 print("--------------")
+
 # Cantidad total de municipios
 mun_uniques = []
 for mun in data:
@@ -94,14 +94,13 @@ finish = time.perf_counter()
 print("tiempo ejecucion: ", finish - start)
 print("--------------")
 
-
 #   CREACION LISTAS X e Y PARA EL GRAFICO POSTERIOR.
 #Y =create_y(data)
 #Y = dict(sorted(Y.items(), key= lambda tupla: tupla[0]))
+
+# encontre esta forma para ordenar el diccionario y funciona.
 result = collections.OrderedDict(sorted(dict_dates.items()))
-#print(result)
 y = dict(result)
-#print(Y)
 Y = list(y.values())
 #X = list(y.keys())
 X = [num for num in range(1, len(Y)+1)]
@@ -113,7 +112,6 @@ print("--------------")
 # REALIZADO EN EL ARCHIVO estad_covid.py
 
 covid_data = Statistics(X, Y)
-
 # plt.plot(X, Y)
 # plt.xlabel('26/02/2020 - 01/07/2021')
 # plt.ylabel('CASOS COVID MADRID')
@@ -128,11 +126,18 @@ X_until65 = [num for num in range(1, len(Y_until65)+1)]
 
 Y_after65 = Y[66:]
 X_after65 = [num for num in range(1, len(Y_after65)+1)]
-# plt.plot(X_after65, Y_after65)
-# plt.xlabel('Despues de los 65 primeros dias')
-# plt.ylabel('CASOS COVID MADRID')
-# plt.show()
+plt.plot(X_after65, Y_after65)
+plt.xlabel('Despues de los 65 primeros dias')
+plt.ylabel('CASOS COVID MADRID')
+plt.show()
 
+# Cuántos confirmados tendremos el 1 de agosto del año 2020?
 after65 = Statistics(X_after65, Y_after65)
-print(after65.rxy)
-print(after65.prediction(77))
+# print(len(X_after65))
+# print(after65.rxy)
+
+# como la fecha que queremos predecir es 31 dias posterior a la ultima toma de datos
+# he calculado la longitud de la muestra que tengo con len() y le sumo 31 dias asi me da el resultado.
+date_topredict = len(X_after65) + 31
+print("La prediccion de casos confirmados para el 01/08/2021 sera: ", after65.prediction(date_topredict))
+
